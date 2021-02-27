@@ -1,0 +1,13 @@
+#!/bin/bash
+
+sourceDir=${1-/Photos}
+find $sourceDir -type f -print | fgrep -i .jpg | while read file
+do
+	newname=$(echo $file | sed 's/jpg/gif/ig')
+	if [[ ! -f "$newname" ]]
+	then
+		echo convert \"$file\" -resize 320x240  \"$newname\"
+		convert "$file" -resize 320x240 "$newname"
+		#convert "$file" -thumbnail 320x240 "$newname"
+	fi
+done

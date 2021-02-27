@@ -1,0 +1,41 @@
+#!/bin/bash
+
+sourceDir=${1-/photoDump}
+
+# AVI
+find $sourceDir -type f -name '*.AVI' -print | while read movie
+do
+	target="${movie%\.AVI}.mp4"
+	if [[ ! -f $target ]]
+	then
+		echo ffmpeg -nostdin -i "$movie" -profile:v baseline -pix_fmt yuv420p -video_track_timescale 600 "$target"
+		ffmpeg -nostdin  -i "$movie" -profile:v baseline -pix_fmt yuv420p -video_track_timescale 600 "$target" > /dev/null 2> /dev/null
+		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
+	fi
+done
+
+# 3gp
+find $sourceDir -type f -name '*.3gp' -print | while read movie
+do
+	target="${movie%\.3gp}.mp4"
+	if [[ ! -f $target ]]
+	then
+		echo ffmpeg -nostdin -i "$movie" "$target"  
+		ffmpeg -nostdin -i "$movie" "$target"  > /dev/null 2>&1
+		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
+		exiftool -overwrite_original "-DateTimeOriginal<CreateDate" "$target" > /dev/null 2>&1
+	fi
+done
+
+# mov
+find $sourceDir -type f -name '*.mov' -print | while read movie
+do
+	target="${movie%\.mov}.mp4"
+	if [[ ! -f $target ]]
+	then
+		echo ffmpeg -nostdin -i "$movie" "$target" 
+		ffmpeg -nostdin -i "$movie" "$target" > /dev/null 2>&1
+		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
+		exiftool -overwrite_original "-DateTimeOriginal<CreateDate" "$target" > /dev/null 2>&1
+	fi
+done

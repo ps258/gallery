@@ -1,0 +1,15 @@
+#!/bin/bash
+
+sumfile=/photoDump/md5sum
+
+for file in "$@"
+do
+  filepath=$(grep "$file" $sumfile | cut -f 1 -d ' ' --complement | sed 's/ //')
+  if [[ ! -z "$filepath" ]]
+  then
+    ls -l "$filepath"
+    echo rm \"$filepath\"
+    rm "$filepath"
+    fgrep -v "$filepath" $sumfile > file && mv file $sumfile
+  fi
+done

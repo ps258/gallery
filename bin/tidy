@@ -1,0 +1,17 @@
+#!/bin/bash
+
+awk '{print $1}' /photoDump/md5sum | sort | uniq -c | sort -n | awk '$1!=1 {print}' | while read sumCount Sum
+do
+	#echo Count = $sumCount,  Sum = $Sum
+  noTildaCount=$(grep $Sum /photoDump/md5sum | fgrep -v \~ | wc -l)
+	#echo noTildaCount = $noTildaCount
+  if [[ $sumCount -gt $noTildaCount ]]
+  then
+    grep $Sum /photoDump/md5sum | fgrep \~ | while read _sum file
+    do
+      echo Purging $Sum 
+      echo rm \"$file\"
+      rm "$file"
+    done
+  fi
+done

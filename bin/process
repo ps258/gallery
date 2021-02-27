@@ -1,0 +1,116 @@
+#!/bin/bash
+
+PATH=/home/pstubbs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+sourceDir=${1-/photoDump}
+targetBaseDir=/Photos
+sumfile=$targetBaseDir/md5sums.txt
+find $sourceDir -type f -print | egrep -i '\.jpg|\.mp4' | while read file
+do
+	echo "------------------------------"
+	echo "[INFO]\"$file\""
+	basename=$(basename "$file")
+	sum=$(md5sum "$file" | awk '{print $1}')
+	# check if its already in the photo repo
+	if grep -q $sum $sumfile
+	then
+		echo \"$file\" found in $sumfile:
+		grep "$sum" $sumfile
+		echo rm \"$file\"
+		rm -f "$file"
+		continue
+	fi
+	# work out where in the repo it should live
+	#DateTime=$(identify -format "%[EXIF:DateTime]" "$file" 2>/dev/null)
+	DateTime=$(exiftool -d "%Y-%m-%d %H:%M:%S" -DateTimeOriginal -S -s "$file" 2>/dev/null)
+	if [[ -z $DateTime ]]
+	then
+		echo "[FATAL]Unable to get EXIF data from \"$file\"" | tee -a /tmp/notdone
+		continue
+		# Notes. If the mtime of the file is old (believable) then use that.
+		DateTime=$(stat --format %y "$file")
+		day=$(echo $DateTime | awk '{print $1}' | sed 's/:/-/g')
+		time=$(echo $DateTime | awk '{print $2}')
+		#exiftool -overwrite_original -DateTimeOriginal="$DateTime" "$file"
+		exiftool -overwrite_original "-DateTimeOriginal<filemodifydate" "$file"
+		DateTime="$day $time"
+		year=$(date -d"$DateTime" +%Y)	# 4 digit year
+		daydir=$(date -d"$DateTime" +%y-%m-%d) # yy-mm-dd
+	else
+		# getting times from EXIF
+		day=$(echo $DateTime | awk '{print $1}' | sed 's/:/-/g')
+		time=$(echo $DateTime | awk '{print $2}')
+		DateTime="$day $time"
+		year=$(date -d"$DateTime" +%Y)	# 4 digit year
+		daydir=$(date -d"$DateTime" +%y-%m-%d) # yy-mm-dd
+	fi
+	targetFile="$targetBaseDir/$year/$daydir/$basename"
+	# is it already in place?
+	if [[ -f "$targetFile" ]]
+	then
+		# The file exists. Do we need to update it.
+		sourceSize=$(stat --format %s "$file")
+		targetSize=$(stat --format %s "$targetFile")
+		if [[ $sourceSize -gt $targetSize ]]
+		then
+			ls -l "$file" "$targetFile"
+			echo mv -v \"$file\" \"$targetFile\"
+			# remove the old md5sum
+			targetSum=$(grep "$targetFile" $sumfile | awk '{print $1}')
+			grep -v $targetSum $sumfile > /tmp/file && mv /tmp/file $sumfile
+			# put the file in place
+			mv -v "$file" "$targetFile"
+			touch --date="$DateTime" "$targetFile"
+			chmod 664 "$targetFile"
+			# update the md5sum
+			md5sum "$targetFile" >> $sumfile
+			echo $targetFile >> /tmp/newpaths
+		else
+			ls -l "$file" "$targetFile"
+			echo "[INFO]Removing because \"$file\" is not bigger"
+			echo rm \"$file\"
+			rm "$file"
+		fi
+	else
+		# create the place for it to live
+		if [[ ! -d "$targetBaseDir/$year" ]]
+		then
+			mkdir "$targetBaseDir/$year"
+		fi
+		if [[ ! -d "$targetBaseDir/$year/$daydir" ]]
+		then
+			mkdir "$targetBaseDir/$year/$daydir"
+		fi
+		# put the file in place
+		if [[ -d "$targetBaseDir/$year/$daydir" ]]
+		then
+			echo mv -v \"$file\" \"$targetFile\"
+			mv -v "$file" "$targetFile"
+			touch --date="$DateTime" "$targetFile"
+			chmod 664 "$targetFile"
+			# record the md5sum
+			md5sum "$targetFile" >> $sumfile
+			echo $targetFile >> /tmp/newpaths
+		else
+			echo "[FATAL] \"$targetBaseDir/$year/$daydir\" not found"
+			exit 1
+		fi
+	fi
+done
+
+if [[ -f /tmp/notdone ]]
+then
+	print "[INFO]the following not processed"
+	cat /tmp/notdone
+	rm -f /tmp/notdone
+fi
+
+if [[ -f /tmp/newpaths ]]
+then
+	print "[INFO]The following directories updated"
+	cat /tmp/newpaths | while read line
+	do
+		echo $(dirname $line)
+	done | sort -u
+	rm -f /tmp/newpaths
+fi

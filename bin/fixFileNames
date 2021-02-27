@@ -1,0 +1,74 @@
+#!/bin/bash
+
+sourceDir=${1-/photoDump}
+find $sourceDir -type f -print | while read file
+do
+	dirname=$(dirname "$file")
+	baseName=$(basename "$file")
+	# get rid of multiple spaces
+	newName=$(echo $baseName | tr -s ' ')
+	# replace 'K&C' with 'K_and_C'
+	if echo $newName | grep -qi 'K&C'
+	then
+		newName=$(echo $newName | sed 's/K&C/K_and_C/gi')
+	fi
+	# replace WhatsApp Image
+	if echo $newName | grep -qi 'WhatsApp Image '
+	then
+		newName=$(echo $newName | sed 's/WhatsApp Image //gi')
+	fi
+	# replace WhatsApp Image
+	if echo $newName | grep -qi 'WhatsApp Video '
+	then
+		newName=$(echo $newName | sed 's/ hatsApp Video //gi')
+	fi
+	# replace 'Moe' with 'Mo'
+	if echo $newName | grep -qi 'moe'
+	then
+		newName=$(echo $newName | sed 's/moe/Mo/gi')
+	fi
+	# replace ampersand
+	if echo $newName | grep -q \+
+	then
+		newName=$(echo $newName | sed 's/+/with/g')
+	fi
+	# replace ampersand
+	if echo $newName | grep -q \&
+	then
+		newName=$(echo $newName | sed 's/&/and/g')
+	fi
+	# remove ' and "
+	if echo $newName | egrep -q "[\"\',\(\)]"
+	then
+		newName=$(echo $newName | tr -d "[\"\',\(\)]")
+	fi
+	# replace jpeg with jpg
+	if echo $newName | grep -q '\.jpeg'
+	then
+		newName=$(echo $newName | sed 's/\.jpeg$/\.jpg/')
+	fi
+	# Change space to _
+	if echo $newName | egrep -q "[\" ]"
+	then
+		newName=$(echo $newName | tr "[\" ]" "_")
+	fi
+	# Get rid of -edited
+	if echo $newName | egrep -q -- -edited
+	then
+		newName=$(echo $newName | sed 's/-edited//')
+		echo mv -v \"$file\" \"$dirname/$newName\"
+		mv -v "$file" "$dirname/$newName"
+		continue
+	fi
+	# get rid of multiple _
+	newName=$(echo $newName | tr -s '_')
+	# have we made a change?
+	if [[ $newName != $baseName ]]
+	then
+		if [[ ! -f "$dirname/$newName" ]]
+		then
+			echo mv -v \"$file\" \"$dirname/$newName\"
+			mv -v "$file" "$dirname/$newName"
+		fi
+	fi
+done
