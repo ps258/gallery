@@ -100,17 +100,18 @@ done
 
 if [[ -f /tmp/notdone ]]
 then
-	print "[INFO]the following not processed"
+	echo "[INFO]the following not processed"
 	cat /tmp/notdone
 	rm -f /tmp/notdone
 fi
 
 if [[ -f /tmp/newpaths ]]
 then
-	print "[INFO]The following directories updated"
-	cat /tmp/newpaths | while read line
+	echo "[INFO]The following directories updated"
+	#cat /tmp/newpaths | while read line
+	for line in $(cat /tmp/newpaths)
 	do
-		echo $(dirname $line)
+		echo $(dirname "$line")
 	done | sort -u
 	rm -f /tmp/newpaths
 fi
