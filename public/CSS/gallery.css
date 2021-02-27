@@ -22,7 +22,8 @@ img.full_size {
    margin: 0 auto;
    display:block;
    vertical-align:middle;
-	 max-width: 60%;
+	 max-width: 80%;
+	 width: 80%;
 	 height: auto;
 }
 
