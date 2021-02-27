@@ -109,7 +109,7 @@ if [[ -f /tmp/newpaths ]]
 then
 	echo "[INFO]The following directories updated"
 	#cat /tmp/newpaths | while read line
-	for line in $(cat /tmp/newpaths)
+	for line in $(</tmp/newpaths)
 	do
 		echo $(dirname "$line")
 	done | sort -u
