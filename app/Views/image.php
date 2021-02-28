@@ -48,15 +48,17 @@ $(document).ready(function(){
               $exif = false;
             }
             list($width, $height, $type, $attr) = getimagesize("/var/www/html/gallery/public/Photos/$year/$day/$image");
-            $middle_left = ($width/2)-1;
-            $middle_right = $middle_left+1;
-            print "<img class=\"full_size\" src=\"/Photos/$year/$day/$image\" usemap=\"#nextimage\">\n";
-            #print "<img class=\"full_size\" src=\"/Photos/$year/$day/$image\">\n";
-            #$next_url=site_url("gallery/show_image/$year/$day/$next_image");
             $next_url="/gallery/show_image/$year/$day/$next_image";
-            #$prev_url=site_url("gallery/show_image/$year/$day/$prev_image");
             $prev_url="/gallery/show_image/$year/$day/$prev_image";
-            print "<map name=\"nextimage\"><area shape=\"rect\" coords=\"0,0,$middle_left,$height\" href=\"$prev_url\"/><area shape=\"rect\" coords=\"$middle_right,0,$width,$height\" href=\"$next_url\"/></map>\n";
+						print "<table><tr>";
+						if ($prev_image != $this_image) {
+							print "<td style=\"vertical-align:top\"><a href=\"$prev_url\"><img src=\"/Photos/skip-back-fill.png\" alt=\"Prev <<<\"/></a></td>";
+						}
+            print "<td><img class=\"full_size\" src=\"/Photos/$year/$day/$image\" ></td>\n";
+						if ($next_image != $this_image) {
+							print "<td style=\"vertical-align:top\"><a href=\"$next_url\"><img src=\"/Photos/skip-forward-fill.png\" alt=\">>> Next\"/></a></td>";
+						}
+						print "</tr></table>";
             if ( $exif )
             {
                 $exif = exif_read_data("/var/www/html/gallery/public/Photos/$year/$day/$image", 0, true);
@@ -112,8 +114,17 @@ $(document).ready(function(){
             break;
         case 'MP4':
         case 'mp4':
-					#print "<embed class=\"thumb\" height=\"264\" width=\"325\" border=\"1\" src=\"/Photos/$year/$day/$image\" name=\"$image\" loop=\"false\" controller=\"true\" autoplay=\"false\">\n";
-					print "<video height=\"60%\" width=\"60%\" controls><source src=\"/Photos/$year/$day/$image\"></video>";
+					$next_url="/gallery/show_image/$year/$day/$next_image";
+					$prev_url="/gallery/show_image/$year/$day/$prev_image";
+					print "<table width=\"70%\"><tr>";
+					if ($prev_image != $this_image) {
+						print "<td style=\"vertical-align:top\"><a href=\"$prev_url\"><img src=\"/Photos/skip-back-fill.png\" alt=\"Prev <<<\"/></a></td>";
+					}
+					print "<td align=\"center\"><video height=\"60%\" width=\"60%\" controls><source src=\"/Photos/$year/$day/$image\"></video></td>";
+					if ($next_image != $this_image) {
+						print "<td style=\"vertical-align:top\"><a href=\"$next_url\"><img src=\"/Photos/skip-forward-fill.png\" alt=\">>> Next\"/></a></td>";
+					}
+					print "</tr></table>";
 					print "<p></p>\n";
 					print "<ul>\n";
 					print "<li><a href=\"/Photos/$year/$day/$image\">Download $image</a></li>\n";
