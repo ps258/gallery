@@ -2,6 +2,8 @@
 
 sourceDir=${1-/photoDump}
 
+# convert AVI 3gp or mov files into mp4s
+
 # AVI
 find $sourceDir -type f -name '*.AVI' -print | while read movie
 do

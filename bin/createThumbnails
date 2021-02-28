@@ -7,7 +7,7 @@ do
 	if [[ ! -f "$newname" ]]
 	then
 		echo convert -auto-orient \"$file\" -resize 320x240  \"$newname\"
-		convert "$file" -resize 320x240 "$newname"
+		convert -auto-orient "$file" -resize 320x240 "$newname"
 		#convert "$file" -thumbnail 320x240 "$newname"
 	fi
 done
