@@ -7,7 +7,7 @@ sourceDir=${1-/photoDump}
 find $sourceDir -type f -print | while read fileName
 do
 	basename=$(basename "$fileName")
-	basename=${name%.*}
-	grep "$basename" /Photos/md5sums.txt || echo $fileName
+	basename=${basename%.*}
+	grep -q "$basename" /Photos/md5sums.txt || echo $fileName
 done
 
