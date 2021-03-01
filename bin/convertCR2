@@ -5,6 +5,6 @@ find $sourceDir -type f -name \*.CR2 -print | while read cr2File
 do
 	echo dcraw -c "$cr2File" \| convert - "${cr2File%\.CR2}.jpg"
 	dcraw -c "$cr2File" | convert - "${cr2File%\.CR2}.jpg"
-	echo exiftool -tagsfromfile "$cr2File" "${cr2File%\.CR2}.jpg"
-	exiftool -tagsfromfile "$cr2File" "${cr2File%\.CR2}.jpg"
+	echo exiftool -overwrite_original -tagsfromfile "$cr2File" "${cr2File%\.CR2}.jpg"
+	exiftool -overwrite_original -tagsfromfile "$cr2File" "${cr2File%\.CR2}.jpg"
 done
