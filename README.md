@@ -15,6 +15,8 @@ A very simple directory based code igniter photo gallery
 Get composer from https://getcomposer.org/download/
 
     wget -O composer https://getcomposer.org/installer
+    php ./installer
+    mv composer.phar composer
     chmod +x composer
     cd /var/www/html
     ~/composer create-project codeigniter4/appstarter gallery
