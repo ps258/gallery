@@ -61,4 +61,5 @@ and
 
     $routes->get('/', 'Home::index');
 to
+
     $routes->get('/', 'Gallery::index');
