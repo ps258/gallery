@@ -57,6 +57,11 @@ do
 			echo mv -v \"$file\" \"$targetFile\"
 			# remove the old md5sum
 			targetSum=$(grep "$targetFile" $sumfile | awk '{print $1}')
+			if [[ -z $targetSum ]]
+			then
+				md5sum "$targetFile" >> $sumfile
+				targetSum=$(grep "$targetFile" $sumfile | awk '{print $1}')
+			fi
 			grep -v $targetSum $sumfile > /tmp/file && mv /tmp/file $sumfile
 			# put the file in place
 			mv -v "$file" "$targetFile"
