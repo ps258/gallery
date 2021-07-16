@@ -13,6 +13,7 @@ do
 		echo ffmpeg -nostdin -i "$movie" -profile:v baseline -pix_fmt yuv420p -video_track_timescale 600 "$target"
 		ffmpeg -nostdin  -i "$movie" -profile:v baseline -pix_fmt yuv420p -video_track_timescale 600 "$target" > /dev/null 2> /dev/null
 		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
+		touch -r "$movie" "$target"
 	fi
 done
 
@@ -26,6 +27,7 @@ do
 		ffmpeg -nostdin -i "$movie" "$target"  > /dev/null 2>&1
 		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
 		exiftool -overwrite_original "-DateTimeOriginal<CreateDate" "$target" > /dev/null 2>&1
+		touch -r "$movie" "$target"
 	fi
 done
 
@@ -39,5 +41,6 @@ do
 		ffmpeg -nostdin -i "$movie" "$target" > /dev/null 2>&1
 		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
 		exiftool -overwrite_original "-DateTimeOriginal<CreateDate" "$target" > /dev/null 2>&1
+		touch -r "$movie" "$target"
 	fi
 done

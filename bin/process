@@ -25,6 +25,10 @@ do
 	DateTime=$(exiftool -d "%Y-%m-%d %H:%M:%S" -DateTimeOriginal -S -s "$file" 2>/dev/null)
 	if [[ -z $DateTime ]]
 	then
+		DateTime=$(exiftool -d "%Y-%m-%d %H:%M:%S" -CreateDate -S -s "$file" 2>/dev/null)
+	fi
+	if [[ -z $DateTime ]]
+	then
 		echo "[FATAL]Unable to get EXIF data from \"$file\"" | tee -a /tmp/notdone
 		continue
 		# Notes. If the mtime of the file is old (believable) then use that.
