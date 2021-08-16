@@ -5,7 +5,7 @@ PATH=/home/pstubbs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/
 sourceDir=${1-/photoDump}
 targetBaseDir=/Photos
 sumfile=$targetBaseDir/md5sums.txt
-find $sourceDir -type f -print | egrep -i '\.jpg|\.mp4' | while read file
+find $sourceDir -type f -print | egrep -i '\.jpg|\.mp4|\.jpeg' | while read file
 do
 	echo "------------------------------"
 	echo "[INFO]\"$file\""
