@@ -27,7 +27,7 @@ do
 	then
 		newName=$(echo $newName | sed 's/moe/Mo/gi')
 	fi
-	# replace ampersand
+	# replace plus
 	if echo $newName | grep -q \+
 	then
 		newName=$(echo $newName | sed 's/+/with/g')
