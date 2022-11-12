@@ -47,6 +47,11 @@ do
 	then
 		newName=$(echo $newName | sed 's/\.jpeg$/\.jpg/')
 	fi
+	# replace JPG with jpg
+	if echo $newName | grep -q '\.JPG'
+	then
+		newName=$(echo $newName | sed 's/\.JPG$/\.jpg/')
+	fi
 	# Change space to _
 	if echo $newName | egrep -q "[\" ]"
 	then
