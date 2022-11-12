@@ -58,7 +58,6 @@ do
 		if [[ $sourceSize -gt $targetSize ]]
 		then
 			ls -l "$file" "$targetFile"
-			echo mv -v \"$file\" \"$targetFile\"
 			# remove the old md5sum
 			targetSum=$(grep "$targetFile" $sumfile | awk '{print $1}')
 			if [[ -z $targetSum ]]
@@ -68,6 +67,7 @@ do
 			fi
 			grep -v $targetSum $sumfile > /tmp/file && mv /tmp/file $sumfile
 			# put the file in place
+			echo mv -v \"$file\" \"$targetFile\"
 			mv -v "$file" "$targetFile"
 			touch --date="$DateTime" "$targetFile"
 			chmod 664 "$targetFile"
