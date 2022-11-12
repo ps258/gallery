@@ -52,6 +52,11 @@ do
 	then
 		newName=$(echo $newName | sed 's/\.JPG$/\.jpg/')
 	fi
+	# replace MOV with mov
+	if echo $newName | grep -q '\.MOV'
+	then
+		newName=$(echo $newName | sed 's/\.MOV$/\.mov/')
+	fi
 	# Change space to _
 	if echo $newName | egrep -q "[\" ]"
 	then
