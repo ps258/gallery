@@ -1,3 +1,9 @@
 #!/bin/bash
 
 find /Photos/ -type f -not -name \*.gif -print0 | xargs -0 md5sum > /Photos/md5sums.txt
+
+# check for duplicates
+echo "[INFO]Checking for duplicate files"
+for sum in $(awk '{print $1}' /Photos/md5sums.txt | sort | uniq -c| grep -vw 1); do
+	grep $sum /Photos/md5sums.txt
+done
