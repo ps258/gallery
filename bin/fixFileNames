@@ -20,7 +20,7 @@ do
 	# replace WhatsApp Image
 	if echo $newName | grep -qi 'WhatsApp Video '
 	then
-		newName=$(echo $newName | sed 's/ hatsApp Video //gi')
+		newName=$(echo $newName | sed 's/ WhatsApp Video //gi')
 	fi
 	# replace 'Moe' with 'Mo'
 	if echo $newName | grep -qi 'moe'
@@ -66,7 +66,7 @@ do
 	if echo $newName | egrep -q -- -edited
 	then
 		newName=$(echo $newName | sed 's/-edited//')
-		echo mv -v \"$file\" \"$dirname/$newName\"
+		#echo mv -v \"$file\" \"$dirname/$newName\"
 		mv -v "$file" "$dirname/$newName"
 		continue
 	fi
@@ -77,7 +77,7 @@ do
 	then
 		if [[ ! -f "$dirname/$newName" ]]
 		then
-			echo mv -v \"$file\" \"$dirname/$newName\"
+			#echo mv -v \"$file\" \"$dirname/$newName\"
 			mv -v "$file" "$dirname/$newName"
 		fi
 	fi
