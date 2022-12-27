@@ -32,9 +32,7 @@ do
 	fi
 	if grep -iq "/$basename" $sumfile ; then
 		echo "'$basename' found in $sumfile by name:"
-		# this quotes files with spaces etc. in their names
-		# printf '%q' "$basename"
-		ls -l "$file" $(awk "/\/$(printf '%q' "$basename")/ {\$1=x; print \$0}" $sumfile | xargs)
+		ls -l "$file" $(grep -i "/$basename" $sumfile | awk '{print $NF}'| xargs)
 		rm $file
 		continue
 	fi

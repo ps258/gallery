@@ -94,6 +94,9 @@ do
 		then
 			#echo mv -v \"$file\" \"$dirname/$newName\"
 			mv -v "$file" "$dirname/$newName"
+		else
+			echo "[WARN]Can't rename '$file' to '$dirname/$newName'. Destination exists"
+			ls -l "$file" "$dirname/$newName"
 		fi
 	fi
 done
