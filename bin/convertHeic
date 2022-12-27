@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# convert heic and hief files to jpg
+
+sourceDir=${1-/photoDump}
+
+# heic files
+find $sourceDir -type f -name \*.heic -print | while read heicFile
+do
+	targetFile="${heicFile%\.heic}.jpg"
+	echo heif-convert -q 100 "$heicFile" "$targetFile"
+	heif-convert -q 100 "$heicFile" "$targetFile"
+	echo exiftool -overwrite_original -tagsfromfile "$heicFile" "$targetFile"
+	exiftool -overwrite_original -tagsfromfile "$heicFile" "$targetFile"
+done
+
+# heif files
+find $sourceDir -type f -name \*.heif -print | while read heifFile
+do
+	targetFile="${heifFile%\.heif}.jpg"
+	echo heif-convert -q 100 "$heifFile" "$targetFile"
+	heif-convert -q 100 "$heifFile" "$targetFile"
+	echo exiftool -overwrite_original -tagsfromfile "$heifFile" "$targetFile"
+	exiftool -overwrite_original -tagsfromfile "$heifFile" "$targetFile"
+done

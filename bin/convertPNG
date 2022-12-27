@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sourceDir=${1-/photoDump}
+
+find $sourceDir -type f -name \*.png -print | while read pngFile
+do
+	targetFile="${pngFile%\.png}.jpg"
+	echo convert -quality 100 "$pngFile" "$targetFile"
+	convert -quality 100 "$pngFile" "$targetFile"
+	echo exiftool -overwrite_original -tagsfromfile "$pngFile" "$targetFile"
+	exiftool -overwrite_original -tagsfromfile "$pngFile" "$targetFile"
+done
