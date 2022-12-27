@@ -1,7 +1,9 @@
 #!/bin/bash
 
-for a in *.jpg
+for a in *_at_*.jpg
 do
-	timestamp=$(echo $a | sed 's/\.jpg//' | sed 's/_at_/ /' | sed 's/_1//' | sed 's/_2//')
-	exiftool -overwrite_original -AllDates="$timestamp" $a
+	if [[ -f $a ]]; then
+		timestamp=$(echo $a | sed 's/\.jpg//' | sed 's/_at_/ /' | sed 's/_1//' | sed 's/_2//')
+		exiftool -overwrite_original -AllDates="$timestamp" $a
+	fi
 done
