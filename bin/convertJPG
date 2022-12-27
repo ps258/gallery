@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# a non-op to fix some jpg files
+sourceDir=${1-/photoDump}
+
+find $sourceDir -type f -name 'IMG*.jpg' -print | while read jpgFile
+do
+	targetFile="${jpgFile%\.jpg}.jpeg"
+	echo convert -quality 100 "$jpgFile" "$targetFile"
+	convert -quality 100 "$jpgFile" "$targetFile"
+	echo exiftool -overwrite_original -tagsfromfile "$jpgFile" "$targetFile"
+	exiftool -overwrite_original -tagsfromfile "$jpgFile" "$targetFile"
+	mv "$targetFile" "$jpgFile"
+done

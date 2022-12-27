@@ -12,12 +12,11 @@ do
 	basename=$(basename "$file")
 	sum=$(md5sum "$file" | awk '{print $1}')
 	# check if its already in the photo repo
-	if grep -q $sum $sumfile
+	found=false
+	if grep -wq $sum $sumfile
 	then
-		echo \"$file\" found in $sumfile:
-		grep "$sum" $sumfile
-		found=false
-		for fileName in $(awk '/'$sum'/ {print $NF}'); do
+		echo "'$file' ($sum) found in $sumfile by sum:"
+		for fileName in $(awk '/'$sum'/ {print $NF}' $sumfile); do
 			if [[ -f $fileName ]]; then
 				found=true
 			fi
@@ -29,6 +28,14 @@ do
 			echo "[WARN]$file found in $sumfile with $sum but not found under $targetBaseDir"
 			exit 1
 		fi
+		continue
+	fi
+	if grep -iq "/$basename" $sumfile ; then
+		echo "'$basename' found in $sumfile by name:"
+		# this quotes files with spaces etc. in their names
+		# printf '%q' "$basename"
+		ls -l "$file" $(awk "/\/$(printf '%q' "$basename")/ {\$1=x; print \$0}" $sumfile | xargs)
+		rm $file
 		continue
 	fi
 	# work out where in the repo it should live

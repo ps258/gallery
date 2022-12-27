@@ -38,19 +38,34 @@ do
 		newName=$(echo $newName | sed 's/&/and/g')
 	fi
 	# remove ' and "
-	if echo $newName | egrep -q "[\"\',\(\)]"
+	if echo $newName | egrep -q "[\"\',\(\)!]"
 	then
-		newName=$(echo $newName | tr -d "[\"\',\(\)]")
+		newName=$(echo $newName | tr -d "[\"\',\(\)!]")
 	fi
 	# replace jpeg with jpg
 	if echo $newName | grep -q '\.jpeg'
 	then
 		newName=$(echo $newName | sed 's/\.jpeg$/\.jpg/')
 	fi
+	# replace MPG with mpg
+	if echo $newName | grep -q '\.MPG'
+	then
+		newName=$(echo $newName | sed 's/\.MPG$/\.mpg/')
+	fi
 	# replace JPG with jpg
 	if echo $newName | grep -q '\.JPG'
 	then
 		newName=$(echo $newName | sed 's/\.JPG$/\.jpg/')
+	fi
+	# replace PNG with png
+	if echo $newName | grep -q '\.PNG'
+	then
+		newName=$(echo $newName | sed 's/\.PNG$/\.png/')
+	fi
+	# replace BMP with bmp
+	if echo $newName | grep -q '\.BMP'
+	then
+		newName=$(echo $newName | sed 's/\.BMP$/\.bmp/')
 	fi
 	# replace MOV with mov
 	if echo $newName | grep -q '\.MOV'

@@ -2,7 +2,7 @@
 
 sourceDir=${1-/photoDump}
 
-# convert AVI 3gp or mov files into mp4s
+# convert AVI, 3gp, mpg or mov files into mp4s
 
 # AVI
 find $sourceDir -type f -name '*.AVI' -print | while read movie
@@ -35,6 +35,20 @@ done
 find $sourceDir -type f -name '*.mov' -print | while read movie
 do
 	target="${movie%\.mov}.mp4"
+	if [[ ! -f $target ]]
+	then
+		echo ffmpeg -nostdin -i "$movie" "$target" 
+		ffmpeg -nostdin -i "$movie" "$target" > /dev/null 2>&1
+		exiftool -overwrite_original -tagsfromfile "$movie" "$target"
+		exiftool -overwrite_original "-DateTimeOriginal<CreateDate" "$target" > /dev/null 2>&1
+		touch -r "$movie" "$target"
+	fi
+done
+
+# mpg
+find $sourceDir -type f -name '*.mpg' -print | while read movie
+do
+	target="${movie%\.mpg}.mp4"
 	if [[ ! -f $target ]]
 	then
 		echo ffmpeg -nostdin -i "$movie" "$target" 
