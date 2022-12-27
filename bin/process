@@ -16,18 +16,28 @@ do
 	then
 		echo \"$file\" found in $sumfile:
 		grep "$sum" $sumfile
-		echo rm \"$file\"
-		rm -f "$file"
+		found=false
+		for fileName in $(awk '/'$sum'/ {print $NF}'); do
+			if [[ -f $fileName ]]; then
+				found=true
+			fi
+		done
+		if [[ $found == 'true' ]]; then
+			echo rm \"$file\"
+			rm -f "$file"
+		else
+			echo "[WARN]$file found in $sumfile with $sum but not found under $targetBaseDir"
+			exit 1
+		fi
 		continue
 	fi
 	# work out where in the repo it should live
-	#DateTime=$(identify -format "%[EXIF:DateTime]" "$file" 2>/dev/null)
 	DateTime=$(exiftool -d "%Y-%m-%d %H:%M:%S" -DateTimeOriginal -S -s "$file" 2>/dev/null)
 	if [[ -z $DateTime ]]
 	then
 		DateTime=$(exiftool -d "%Y-%m-%d %H:%M:%S" -CreateDate -S -s "$file" 2>/dev/null)
 	fi
-	if [[ -z $DateTime ]]
+	if [[ -z $DateTime || $DateTime == '0000:00:00 00:00:00' ]]
 	then
 		echo "[FATAL]Unable to get EXIF data from \"$file\"" | tee -a /tmp/notdone
 		continue
@@ -35,7 +45,6 @@ do
 		DateTime=$(stat --format %y "$file")
 		day=$(echo $DateTime | awk '{print $1}' | sed 's/:/-/g')
 		time=$(echo $DateTime | awk '{print $2}')
-		#exiftool -overwrite_original -DateTimeOriginal="$DateTime" "$file"
 		exiftool -overwrite_original "-DateTimeOriginal<filemodifydate" "$file"
 		DateTime="$day $time"
 		year=$(date -d"$DateTime" +%Y)	# 4 digit year
