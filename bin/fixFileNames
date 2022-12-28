@@ -5,86 +5,32 @@ find $sourceDir -type f -print | while read file
 do
 	dirname=$(dirname "$file")
 	baseName=$(basename "$file")
+	# lower case extention
+	extention=${baseName##*.}
+	extention=${extention,,}
+	newName="${baseName%.*}.$extention"
 	# get rid of multiple spaces
-	newName=$(echo $baseName | tr -s ' ')
+	newName=$(echo $newName | tr -s ' ')
 	# replace 'K&C' with 'K_and_C'
-	if echo $newName | grep -qi 'K&C'
-	then
-		newName=$(echo $newName | sed 's/K&C/K_and_C/gi')
-	fi
+	newName=$(echo $newName | sed 's/K&C/K_and_C/gi')
 	# replace WhatsApp Image
-	if echo $newName | grep -qi 'WhatsApp Image '
-	then
-		newName=$(echo $newName | sed 's/WhatsApp Image //gi')
-	fi
-	# replace WhatsApp Image
-	if echo $newName | grep -qi 'WhatsApp Video '
-	then
-		newName=$(echo $newName | sed 's/ WhatsApp Video //gi')
-	fi
+	newName=$(echo $newName | sed 's/WhatsApp Image //gi')
+	# replace WhatsApp Video
+	newName=$(echo $newName | sed 's/WhatsApp Video //gi')
 	# replace 'Moe' with 'Mo'
-	if echo $newName | grep -qi 'moe'
-	then
-		newName=$(echo $newName | sed 's/moe/Mo/gi')
-	fi
+	newName=$(echo $newName | sed 's/moe/Mo/gi')
 	# replace plus
-	if echo $newName | grep -q \+
-	then
-		newName=$(echo $newName | sed 's/+/with/g')
-	fi
+	newName=$(echo $newName | sed 's/+/with/g')
 	# replace ampersand
-	if echo $newName | grep -q \&
-	then
-		newName=$(echo $newName | sed 's/&/and/g')
-	fi
-	# remove ' and "
-	if echo $newName | egrep -q "[\"\',\(\)!]"
-	then
-		newName=$(echo $newName | tr -d "[\"\',\(\)!]")
-	fi
+	newName=$(echo $newName | sed 's/&/and/g')
+	# remove '"(),!
+	newName=$(echo $newName | tr -d "[\"\',\(\)!]")
 	# replace jpeg with jpg
-	if echo $newName | grep -q '\.jpeg'
-	then
-		newName=$(echo $newName | sed 's/\.jpeg$/\.jpg/')
-	fi
-	# replace MPG with mpg
-	if echo $newName | grep -q '\.MPG'
-	then
-		newName=$(echo $newName | sed 's/\.MPG$/\.mpg/')
-	fi
-	# replace JPG with jpg
-	if echo $newName | grep -q '\.JPG'
-	then
-		newName=$(echo $newName | sed 's/\.JPG$/\.jpg/')
-	fi
-	# replace PNG with png
-	if echo $newName | grep -q '\.PNG'
-	then
-		newName=$(echo $newName | sed 's/\.PNG$/\.png/')
-	fi
-	# replace BMP with bmp
-	if echo $newName | grep -q '\.BMP'
-	then
-		newName=$(echo $newName | sed 's/\.BMP$/\.bmp/')
-	fi
-	# replace MOV with mov
-	if echo $newName | grep -q '\.MOV'
-	then
-		newName=$(echo $newName | sed 's/\.MOV$/\.mov/')
-	fi
+	newName=$(echo $newName | sed 's/\.jpeg$/\.jpg/')
 	# Change space to _
-	if echo $newName | egrep -q "[\" ]"
-	then
-		newName=$(echo $newName | tr "[\" ]" "_")
-	fi
+	newName=$(echo $newName | tr "[\" ]" "_")
 	# Get rid of -edited
-	if echo $newName | egrep -q -- -edited
-	then
-		newName=$(echo $newName | sed 's/-edited//')
-		#echo mv -v \"$file\" \"$dirname/$newName\"
-		mv -v "$file" "$dirname/$newName"
-		continue
-	fi
+	newName=$(echo $newName | sed 's/-edited//')
 	# get rid of multiple _
 	newName=$(echo $newName | tr -s '_')
 	# have we made a change?
