@@ -6,7 +6,7 @@ echo "[INFO]Recreating $MD5FILE"
 find /Photos/ -type f -not -name \*.gif -print0 | xargs -0 md5sum > $MD5FILE
 
 # check for duplicates
-echo "[INFO]Checking for duplicate files"
+echo "[INFO]Checking for duplicate md5 sums"
 for sum in $(awk '{print $1}' $MD5FILE | sort | uniq -c| grep -vw 1 | awk '{print $2}'); do
 	grep $sum $MD5FILE
 done
