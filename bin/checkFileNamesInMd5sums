@@ -4,10 +4,19 @@
 # useful when looking at a bunch of AVIs which have to be converted to MP4 before adding.
 
 sourceDir=${1-/photoDump}
-find $sourceDir -type f -print | while read fileName
+#find $sourceDir -type f -print | while read fileName
+find $sourceDir -type f -not -name \*.gif -print | while read fileName
 do
 	basename=$(basename "$fileName")
-	basename=${basename%.*}
-	grep -q "$basename" /Photos/md5sums.txt || echo $fileName
+	#basename=${basename%.*}
+	if grep -iwq "$basename" /Photos/md5sums.txt; then
+		echo "[WARN]'$fileName': name exists in /Photos/md5sums.txt"
+		ls -l $(grep -iw "$basename" /Photos/md5sums.txt | awk '{print $NF}' | xargs)
+	fi
+	sum=$(md5sum "$fileName" | awk '{print $1}')
+	if grep -q $sum /Photos/md5sums.txt; then
+		echo "[WARN]'$fileName'($sum): md5sum exists in /Photos/md5sums.txt"
+		ls -l $(grep $sum /Photos/md5sums.txt | awk '{print $NF}' | xargs)
+	fi
 done
 
