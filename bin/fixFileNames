@@ -14,9 +14,9 @@ do
 	# replace 'K&C' with 'K_and_C'
 	newName=$(echo $newName | sed 's/K&C/K_and_C/gi')
 	# replace WhatsApp Image
-	newName=$(echo $newName | sed 's/WhatsApp Image //gi')
+	newName=$(echo $newName | sed 's/WhatsApp Image //gi; s/WhatsApp_Image_//gi')
 	# replace WhatsApp Video
-	newName=$(echo $newName | sed 's/WhatsApp Video //gi')
+	newName=$(echo $newName | sed 's/WhatsApp Video //gi; s/WhatsApp_Video_//gi')
 	# replace 'Moe' with 'Mo'
 	newName=$(echo $newName | sed 's/moe/Mo/gi')
 	# replace plus
@@ -28,7 +28,7 @@ do
 	# replace jpeg with jpg
 	newName=$(echo $newName | sed 's/\.jpeg$/\.jpg/')
 	# Change space to _
-	newName=$(echo $newName | tr "[\" ]" "_")
+	newName=$(echo $newName | tr "[:blank:]" "_")
 	# Get rid of -edited
 	newName=$(echo $newName | sed 's/-edited//')
 	# get rid of multiple _

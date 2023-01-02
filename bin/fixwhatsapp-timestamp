@@ -3,7 +3,7 @@
 for a in *_at_*.jpg
 do
 	if [[ -f $a ]]; then
-		timestamp=$(echo $a | sed 's/\.jpg//' | sed 's/_at_/ /' | sed 's/_1//' | sed 's/_2//')
+		timestamp=$(echo $a | sed 's/\.jpg//' | sed 's/_at_/ /' | sed 's/_[[:digit:]]//')
 		exiftool -overwrite_original -AllDates="$timestamp" $a
 	fi
 done
