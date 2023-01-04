@@ -1,13 +1,16 @@
 #!/bin/bash
 
 sourceDir=${1-/Photos}
-find $sourceDir -type f -print | fgrep -i .jpg | while read file
-do
-	newname=$(echo $file | sed 's/jpg/gif/ig')
-	if [[ ! -f "$newname" ]]
-	then
-		echo convert -auto-orient \"$file\" -resize 320x240  \"$newname\"
-		convert -auto-orient "$file" -resize 320x240 "$newname"
-		#convert "$file" -thumbnail 320x240 "$newname"
-	fi
+shift
+for dir in "$sourceDir" "$@"; do
+	find "$dir" -type f -print | fgrep -i .jpg | while read file
+	do
+		newname=$(echo "$file" | sed 's/jpg/gif/ig')
+		if [[ ! -f "$newname" ]]
+		then
+			echo convert -auto-orient \"$file\" -resize 320x240  \"$newname\"
+			convert -auto-orient "$file" -resize 320x240 "$newname"
+			#convert "$file" -thumbnail 320x240 "$newname"
+		fi
+	done
 done
