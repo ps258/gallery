@@ -33,7 +33,7 @@ do
 	if grep -iq "/$basename" $sumfile ; then
 		echo "'$basename' found in $sumfile by name:"
 		ls -l "$file" $(grep -i "/$basename" $sumfile | awk '{print $NF}'| xargs)
-		rm $file
+		#rm $file
 		continue
 	fi
 	# work out where in the repo it should live

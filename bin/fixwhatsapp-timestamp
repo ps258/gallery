@@ -1,9 +1,19 @@
 #!/bin/bash
 
+# parse a file name like '2024-05-11_at_22.32.25.jpg' and extract the timestamp
 for a in *_at_*.jpg *_at_*.mp4
 do
 	if [[ -f $a ]]; then
 		timestamp=$(echo $a | sed 's/\.jpg//' | sed 's/_at_/ /' | sed 's/_[[:digit:]]//')
 		exiftool -overwrite_original -AllDates="$timestamp" $a
+	fi
+done
+
+# parse a file name like 'IMG-20240518-WA0003.jpg' or 'VID-20240518-WA0011.mp4' and extract the date
+for a in IMG-????????-WA????.jpg VID-????????-WA????.mp4
+do
+	if [[ -f $a ]]; then
+		timestamp=$(echo $a | awk -F- '{print $2}' | sed 's/\(....\)\(..\)\(..\)/\1-\2-\3/')
+		exiftool -overwrite_original -AllDates="$timestamp 00:00:00" $a
 	fi
 done
