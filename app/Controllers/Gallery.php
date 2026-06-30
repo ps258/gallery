@@ -207,7 +207,13 @@ class Gallery extends BaseController {
     {
       $data['days'][$year][] = $day_dir;
     }
-    foreach (array_filter(glob($this->photo_root."/$year/$day/*.{jpg,JPG,mp4,MP4}", GLOB_BRACE), 'is_file') as $image)
+    $files = array_merge(
+      glob($this->photo_root."/$year/$day/*.jpg"),
+      glob($this->photo_root."/$year/$day/*.JPG"),
+      glob($this->photo_root."/$year/$day/*.mp4"),
+      glob($this->photo_root."/$year/$day/*.MP4")
+    );
+    foreach (array_filter($files, 'is_file') as $image)
     {
       $data['images'][]=$this->_strip_extension(basename($image));
     }
@@ -239,7 +245,13 @@ class Gallery extends BaseController {
     $images = array();
     $last_image = '';
     $next_image = '';
-    foreach (array_filter(glob($this->photo_root."/$year/$day/*.{jpg,JPG,mp4,MP4}", GLOB_BRACE), 'is_file') as $image)
+    $files = array_merge(
+      glob($this->photo_root."/$year/$day/$image.jpg"),
+      glob($this->photo_root."/$year/$day/$image.JPG"),
+      glob($this->photo_root."/$year/$day/$image.mp4"),
+      glob($this->photo_root."/$year/$day/$image.MP4")
+    );
+    foreach (array_filter($files, 'is_file') as $image)
     {
       $image = $this->_strip_extension(basename($image));
       if ($is_first)
@@ -264,7 +276,13 @@ class Gallery extends BaseController {
     $data['year'] = $year;
     $data['day'] = $day;
     $data['title'] = $image;
-    foreach (array_filter(glob($this->photo_root."/$year/$day/$image.{jpg,JPG,mp4,MP4}", GLOB_BRACE), 'is_file') as $image_file)
+    $files = array_merge(
+      glob($this->photo_root."/$year/$day/$image.jpg"),
+      glob($this->photo_root."/$year/$day/$image.JPG"),
+      glob($this->photo_root."/$year/$day/$image.mp4"),
+      glob($this->photo_root."/$year/$day/$image.MP4")
+    );
+    foreach (array_filter($files, 'is_file') as $image_file)
     {
       $image = basename($image_file);
       $data['image'] = $image;
