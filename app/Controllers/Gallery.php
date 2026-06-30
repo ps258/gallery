@@ -246,10 +246,10 @@ class Gallery extends BaseController {
     $last_image = '';
     $next_image = '';
     $files = array_merge(
-      glob($this->photo_root."/$year/$day/$image.jpg"),
-      glob($this->photo_root."/$year/$day/$image.JPG"),
-      glob($this->photo_root."/$year/$day/$image.mp4"),
-      glob($this->photo_root."/$year/$day/$image.MP4")
+      glob($this->photo_root."/$year/$day/*.jpg"),
+      glob($this->photo_root."/$year/$day/*.JPG"),
+      glob($this->photo_root."/$year/$day/*.mp4"),
+      glob($this->photo_root."/$year/$day/*.MP4")
     );
     foreach (array_filter($files, 'is_file') as $image)
     {
