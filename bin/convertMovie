@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sourceDir=${1-/photoDump}
+DEFAULT_SOURCE=$HOME/gallery/photoDump
+sourceDir=${1-$DEFAULT_SOURCE}
 
 # convert AVI, 3gp, mpg or mov files into mp4s
 

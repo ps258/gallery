@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sumfile=/photoDump/md5sum
+DEFAULT_TARGET=$HOME/gallery/Photos
+sumfile=$DEFAULT_TARGET/md5sum
 
 md5=$(awk '{print $1}' $sumfile | sort | uniq -c | sort -n| tail -1 | awk '{print $NF}')
 #echo md5 = $md5

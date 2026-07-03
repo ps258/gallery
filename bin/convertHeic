@@ -2,7 +2,8 @@
 
 # convert heic and hief files to jpg
 
-sourceDir=${1-/photoDump}
+DEFAULT_SOURCE=$HOME/gallery/photoDump
+sourceDir=${1-$DEFAULT_SOURCE}
 
 # heic files
 find $sourceDir -type f -name \*.heic -print | while read heicFile

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-sourceDir=${1-/photoDump}
+DEFAULT_SOURCE=$HOME/gallery/photoDump
+sourceDir=${1-$DEFAULT_SOURCE}
 
 find $sourceDir -type f -name \*.png -print | while read pngFile
 do

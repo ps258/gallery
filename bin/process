@@ -2,8 +2,11 @@
 
 PATH=/home/pstubbs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
-sourceDir=${1-/photoDump}
-targetBaseDir=/Photos
+DEFAULT_SOURCE=$HOME/gallery/photoDump
+DEFAULT_TARGET=$HOME/gallery/Photos
+
+sourceDir=${1-$DEFAULT_SOURCE)
+targetBaseDir=${2-$DEFAULT_TARGET}
 sumfile=$targetBaseDir/md5sums.txt
 find $sourceDir -type f -print | egrep -i '\.jpg|\.mp4|\.jpeg' | while read file
 do

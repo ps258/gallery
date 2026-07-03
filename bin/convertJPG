@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # a non-op to fix some jpg files
-sourceDir=${1-/photoDump}
+
+DEFAULT_SOURCE=$HOME/gallery/photoDump
+sourceDir=${1-$DEFAULT_SOURCE}
 
 find $sourceDir -type f -name 'IMG*.jpg' -print | while read jpgFile
 do
