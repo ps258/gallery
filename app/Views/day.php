@@ -65,27 +65,27 @@ foreach ($images as $image)
 	$image_path = "$photo_root/$year/$day/$image";
 	if ( is_file("$image_path.gif") )
 	{
-		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.gif\" alt=\"$image\" /></a>\n";
+		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.gif\" alt=\"$image\" loading=\"lazy\"/></a>\n";
 	}
 	elseif ( is_file("$image_path.png") )
 	{
-		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.png\" alt=\"$image\" /></a>\n";
+		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.png\" alt=\"$image\" loading=\"lazy\"/></a>\n";
 	}
 	elseif ( is_file("$image_path.mp4") )
 	{
-		print "<video width=\"320\" controls border=\"10\"><source src=\"/Photos/$year/$day/$image.mp4\" type=\"video/mp4\"></video>\n";
+		print "<video width=\"320\" controls border=\"10\"><source src=\"/Photos/$year/$day/$image.mp4\" type=\"video/mp4\" loading=\"lazy\"></video>\n";
 	}
 	elseif ( is_file("$image_path.MP4") )
 	{
-		print "<video width=\"320\" controls border=\"10\"><source src=\"/Photos/$year/$day/$image.MP4\" type=\"video/mp4\"></video>\n";
+		print "<video width=\"320\" controls border=\"10\"><source src=\"/Photos/$year/$day/$image.MP4\" type=\"video/mp4\" loading=\"lazy\"></video>\n";
 	}
 	elseif ( is_file("$image_path.jpg") )
 	{
-		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.jpg\" alt=\"$image\" width=\"320\" /></a>\n";
+		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.jpg\" alt=\"$image\" width=\"320\" loading=\"lazy\"/></a>\n";
 	}
 	elseif ( is_file("$image_path.JPG") )
 	{
-		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.JPG\" alt=\"$image\" width=\"320\" /></a>\n";
+		print "<a href=\"/gallery/show_image/$year/$day/$image\"><img class=\"thumb\" src=\"/Photos/$year/$day/$image.JPG\" alt=\"$image\" width=\"320\" loading=\"lazy\"/></a>\n";
 	}
 }
 ?>
